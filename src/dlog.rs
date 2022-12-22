@@ -7,7 +7,6 @@ use std::{
 use time::{format_description::FormatItem, OffsetDateTime};
 
 const MB: u64 = 1024 * 1024;
-//const DEFAULT_MAX_SIZE_MB: u64 = 10 * MB;
 
 const TIMESTAMP_FORMAT_OFFSET: &[FormatItem] = time::macros::format_description!(
     "[year]-[month]-[day]T[hour]:[minute]:[second].[subsecond digits:3]"
