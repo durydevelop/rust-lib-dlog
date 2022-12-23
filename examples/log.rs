@@ -1,9 +1,11 @@
-use std::{io::{self, Result}, fs::OpenOptions};
-
-use dlog::dlog::{debug,DLog};
-
+use dlog::dlog::{error,warn,info,debug,trace,DLog};
 
 fn main() {
-    DLog::new().with_file("test.log").unwrap().init_macro().ok();
-    debug!("Secondo");
+    DLog::new().with_color().with_file("./target/debug/examples/test.log").unwrap().init_macro().ok();
+
+    error!("Error message");
+    warn!("Warning message");
+    debug!("Debug message");
+    info!("Info message");
+    trace!("Trace message");
 }

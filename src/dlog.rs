@@ -2,17 +2,32 @@ pub use log::{debug, error, info, trace, warn, LevelFilter};
 use log::{Level, Log, Metadata, ParseLevelError, Record, SetLoggerError};
 use std::{
     env::{self, VarError},
-    str::FromStr, fs::{OpenOptions, File, self, ReadDir}, io::{self, Write}, path::{Path, self, PathBuf},
+    str::FromStr, fs::{OpenOptions, File, self}, io::{self, Write, stdout}, path::{Path, PathBuf},
 };
 use time::{format_description::FormatItem, OffsetDateTime};
 
-const MB: u64 = 1024 * 1024;
+/// Levels constants
+const ERROR_COLOR: &str = "\x1B[31mERROR \x1B[0m";
+const WARN_COLOR: &str = "\x1B[33mWARN  \x1B[0m";
+const INFO_COLOR: &str = "\x1B[32mINFO  \x1B[0m";
+const DEBUG_COLOR: &str = "\x1B[3;34mDEBUG \x1B[0m";
+const TRACE_COLOR: &str = "\x1B[2;3mTRACE \x1B[0m";
+const ERROR: &str = "ERROR ";
+const WARN: &str =  "WARN  ";
+const INFO: &str =  "INFO  ";
+const DEBUG: &str = "DEBUG ";
+const TRACE: &str = "TRACE ";
 
-const TIMESTAMP_FORMAT_OFFSET: &[FormatItem] = time::macros::format_description!(
-    "[year]-[month]-[day]T[hour]:[minute]:[second].[subsecond digits:3]"
+/// Timestamp format definition
+const TIMESTAMP_FORMAT: &[FormatItem] = time::macros::format_description!(
+    "[year]/[month]/[day]T[hour].[minute].[second].[subsecond digits:3]"
 );
 
-const DEFAULT_FILE_EXT: &str = "log";
+/// Info separator
+const SEP: &str = " : ";
+
+
+//const MB: u64 = 1024 * 1024;
 
 #[derive(Debug)]
 pub enum DLogError {
@@ -41,6 +56,10 @@ pub struct DLog {
     file: Option<File>,
     max_file_size: u64,
     max_files_count: u64,
+
+    // Formatting message flags
+    timestamp_enabled: bool,
+    level_enabled: bool,
 }
 
 impl Default for DLog {
@@ -64,6 +83,9 @@ impl DLog {
             file: None,
             max_file_size: 0, // no limits
             max_files_count: 0, // no limits
+
+            timestamp_enabled: true,
+            level_enabled: true,
         }
     }
     
@@ -89,7 +111,7 @@ impl DLog {
 
     /// Convenient function to enable color in construction.
     pub fn with_color(mut self) -> Self {
-        self.set_color_enabled(true);
+        self.enabled_colors(true);
         self
     }
 
@@ -127,24 +149,158 @@ impl DLog {
     }
 
     /// Complete initialization.
-    /// Must call before use this crate.
+    /// Must call before use std::log macro.
     pub fn init_macro(self) -> Result<(),SetLoggerError> {
         log::set_boxed_logger(Box::new(self)).map(|()| log::set_max_level(LevelFilter::Trace))
     }
 
-// ******** end new() default modification functions ********
+// **********************************************************
 
-    pub fn set_log_on_stdout(&mut self, enabled: bool) {
+// ******************* api for direct use *******************
+
+    /// Enable/disable print in console(stdout).
+    pub fn enable_console(&mut self, enabled: bool) {
         self.log_on_stdout=enabled;
     }
-
-    pub fn set_log_on_file(&mut self, enabled: bool) {
+    
+    /// Enable/disable write in file.
+    /// Works only if ['widh_file()'] function has previously called to set the filename.
+    pub fn enable_file(&mut self, enabled: bool) {
         self.log_on_file=enabled;
     }
 
-    pub fn set_color_enabled(&mut self, enabled: bool) {
+    /// Enable/disable colors in console.
+    pub fn enabled_colors(&mut self, enabled: bool) {
         self.color_enabled=enabled;
     }
+
+    /// Enable/disable showing timestamp in log string
+    pub fn enable_timestamp_print(&mut self, enabled: bool) {
+        self.timestamp_enabled=enabled;
+    }
+
+    /// Enable/disable showing level in log string
+    pub fn enable_level_print(&mut self, enabled: bool) {
+        self.level_enabled=enabled;
+    }
+
+    /// Log the ['msg'] string on ['Level::Error']
+    /// -Print on console if ['log_on_stdout'] is enabled.
+    /// -Print in file if ['log_on_file'] is enabled and file is initialized with ['with_file()'].
+    pub fn e(&mut self, msg: &str) {
+        let log_str=self.format_msg(msg, Level::Error);
+        if self.log_on_stdout {
+            self.write_console(&log_str);
+        }
+
+        if self.log_on_file {
+            self.write_file(&log_str).ok();
+        }
+    }
+
+    /// Log the ['msg'] string on ['Level::Warn']
+    /// -Print on console if ['log_on_stdout'] is enabled.
+    /// -Print in file if ['log_on_file'] is enabled and file is initialized with ['with_file()'].
+    pub fn w(&mut self, msg: &str) {
+        let log_str=self.format_msg(msg, Level::Warn);
+        if self.log_on_stdout {
+            self.write_console(&log_str);
+        }
+
+        if self.log_on_file {
+            self.write_file(&log_str).ok();
+        }
+    }
+
+    /// Log the ['msg'] string on ['Level::Info']
+    /// -Print on console if ['log_on_stdout'] is enabled.
+    /// -Print in file if ['log_on_file'] is enabled and file is initialized with ['with_file()'].
+    pub fn i(&mut self, msg: &str) {
+        let log_str=self.format_msg(msg, Level::Info);
+        if self.log_on_stdout {
+            self.write_console(&log_str);
+        }
+
+        if self.log_on_file {
+            self.write_file(&log_str).ok();
+        }
+    }
+
+    /// Log the ['msg'] string on ['Level::Debug']
+    /// -Print on console if ['log_on_stdout'] is enabled.
+    /// -Print in file if ['log_on_file'] is enabled and file is initialized with ['with_file()'].
+    pub fn d(&mut self, msg: &str) {
+        let log_str=self.format_msg(msg, Level::Debug);
+        if self.log_on_stdout {
+            self.write_console(&log_str);
+        }
+
+        if self.log_on_file {
+            self.write_file(&log_str).ok();
+        }
+    }
+
+    /// Log the ['msg'] string on ['Level::Trace']
+    /// -Print on console if ['log_on_stdout'] is enabled.
+    /// -Print in file if ['log_on_file'] is enabled and file is initialized with ['with_file()'].
+    pub fn t(&mut self, msg: &str) {
+        let log_str=self.format_msg(msg, Level::Trace);
+        if self.log_on_stdout {
+            self.write_console(&log_str);
+        }
+
+        if self.log_on_file {
+            self.write_file(&log_str).ok();
+        }
+    }
+
+// ******************* api for internal use *******************
+    /// Format the log message that wil be printed:
+    /// TIMESTAMP + ['SEP'] + LEVEL + ['SEP'] + MESSAGE
+    fn format_msg(&self, msg: &str, level: Level) -> String {
+        let mut log_str=String::new();
+        if self.timestamp_enabled {
+            let timestamp = OffsetDateTime::now_utc().format(&TIMESTAMP_FORMAT).unwrap_or("?".to_string());
+            log_str+=&timestamp;
+            log_str+=SEP;
+        }
+
+        if self.level_enabled {
+            let level_str = self.level_to_str(level, self.color_enabled);
+            log_str+=level_str;
+            log_str+=SEP;
+        }
+        
+        log_str+=msg;
+        log_str
+    }
+
+    /// Print ['msg'] only on stdout.
+    fn write_console(&self, msg: &str) {
+        write!(stdout(),"{}\n",msg).ok();
+    }
+
+    /// ['return'] ['level'] string associated (with color if ['color_enable'] is true).
+    fn level_to_str(&self, level: Level, color_enabled: bool) -> &'static str {
+        if color_enabled {
+            match level {
+                Level::Error    => ERROR_COLOR,
+                Level::Warn     => WARN_COLOR,
+                Level::Info     => INFO_COLOR,
+                Level::Debug    => DEBUG_COLOR,
+                Level::Trace    => TRACE_COLOR,
+            }
+        } else {
+            match level {
+                Level::Error    => ERROR,
+                Level::Warn     => WARN,
+                Level::Info     => INFO,
+                Level::Debug    => DEBUG,
+                Level::Trace    => TRACE,
+            }
+        }
+    }
+// *******************************************************************
 
 // *************************** File handle ***************************
     fn open_file(&self, filename: &str) -> io::Result<File> {
@@ -161,9 +317,10 @@ impl DLog {
     pub fn write_file(&self, msg: &str) -> Result<usize,DLogError> {
         if let Some(file) = &self.file {
             let mut f=file;
-            match f.write(msg.as_bytes()) {
+            let s=format!("{}\n",msg);
+            match f.write(s.as_bytes()) {
                 Ok(b_written) => {
-                    self.check_storage()?;
+                    // TODO: self.check_storage()?;
                     return Ok(b_written);
                 },
                 Err(err) => {
@@ -244,37 +401,17 @@ impl Log for DLog {
 
     fn log(&self, record: &Record) {
         if self.enabled(record.metadata()) {
-            let datetime = OffsetDateTime::now_utc()
-                .format(&TIMESTAMP_FORMAT_OFFSET)
-                .unwrap();
-            let level = level_to_str(record.level(), self.color_enabled);
+            let log_str=self.format_msg(record.args().to_string().as_str(),record.level());
+            
+            if self.log_on_stdout {
+                self.write_console(&log_str);
+            }
 
-            //println!("{} [{}] {}", datetime, level, record.args());
-
-            let msg=record.args().to_string();
-            self.write_file(msg.as_str()).ok();
+            if self. log_on_file {
+                self.write_file(&log_str).ok();
+            }
         }
     }
 
     fn flush(&self) {}
-}
-
-fn level_to_str(level: Level, color_enabled: bool) -> &'static str {
-    if color_enabled {
-        match level {
-            Level::Error => "\x1B[31mERROR\x1B[0m",
-            Level::Warn => "\x1B[33mWARN \x1B[0m",
-            Level::Info => "\x1B[32mINFO \x1B[0m",
-            Level::Debug => "\x1B[3;34mDEBUG\x1B[0m",
-            Level::Trace => "\x1B[2;3mTRACE\x1B[0m",
-        }
-    } else {
-        match level {
-            Level::Error => "ERROR",
-            Level::Warn => "WARN ",
-            Level::Info => "INFO ",
-            Level::Debug => "DEBUG",
-            Level::Trace => "TRACE",
-        }
-    }
 }
