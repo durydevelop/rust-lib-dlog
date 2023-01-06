@@ -1,11 +1,11 @@
 use dlog::dlog::{error,warn,info,debug,trace,DLog};
 
 fn main() {
-    DLog::new().with_color().with_file("./target/debug/examples/test.log").unwrap().init_macro().ok();
+    DLog::new().init_logger().ok();
 
     error!("Error message");
     warn!("Warning message");
-    debug!("Debug message");
     info!("Info message");
+    debug!("Debug message");
     trace!("Trace message");
 }

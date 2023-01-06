@@ -26,15 +26,15 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug example 'log'",
+            "name": "Debug example 'log-macro'",
             "cargo": {
                 "args": [
                     "build",
-                    "--example=log",
+                    "--example=log-macro",
                     "--package=dlog"
                 ],
                 "filter": {
-                    "name": "log",
+                    "name": "log-macro",
                     "kind": "example"
                 }
             },
@@ -44,16 +44,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in example 'log'",
+            "name": "Debug unit tests in example 'log-macro'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
-                    "--example=log",
+                    "--example=log-macro",
                     "--package=dlog"
                 ],
                 "filter": {
-                    "name": "log",
+                    "name": "log-macro",
                     "kind": "example"
                 }
             },
