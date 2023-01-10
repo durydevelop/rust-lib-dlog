@@ -39,44 +39,6 @@
 //!     dlog.t("Trace message");
 //! }
 //! ```
-//! This will outputs:
-//! 
-//!
-//! ----------- dlog current settings -----------
-//! 
-//! Show Colors       =  false
-//! 
-//! Show Level        =  true
-//! 
-//! Show Timestamp    =  true
-//! 
-//! Timestamp Format  =  %Y/%m/%d %H.%M.%S
-//! 
-//! Tags separator    =  ' : '
-//! 
-//! Level             =  TRACE
-//! 
-//! Log on stdout     =  true
-//! 
-//! Log on file       =  false
-//! 
-//! Max file size     =  no limit
-//! 
-//! Max files count   =  no limit
-//! 
-//! ---------------------------------------------
-//! 
-//! 2023/01/01 12.43.14 : ERROR  : Error message
-//! 
-//! 2023/01/01 12.43.14 : WARN   : Warning message
-//! 
-//! 2023/01/01 12.43.14 : INFO   : Info message
-//! 
-//! 2023/01/01 12.43.14 : DEBUG  : Debug message
-//! 
-//! 2023/01/01 12.43.14 : TRACE  : Trace message
-//! 
-//! 
 //! Custom settimgs usage:
 //! 
 //! ```rust
@@ -98,46 +60,6 @@
 //!     dlog.t("Trace message");
 //! }
 //! ```
-//! 
-//! This will outputs:
-//! 
-//! ----------- dlog current settings -----------
-//! 
-//! Show Colors       =  true
-//! 
-//! Show Level        =  true
-//! 
-//! Show Timestamp    =  true
-//! 
-//! Timestamp Format  =  %Y-%m-%d %H:%M:%S
-//! 
-//! Tags separator    =  ' | '
-//! 
-//! Level             =  TRACE
-//! 
-//! Log on stdout     =  true
-//! 
-//! Log on file       =  true
-//! 
-//! Current filename  =  \\?\E:\Dev\rust\lib\dlog\dlog-custom.log
-//! 
-//! Max file size     =  no limit
-//! 
-//! Max files count   =  no limit
-//! 
-//! ---------------------------------------------
-//! 
-//! 2023-01-02 18:00:02 | ERROR  | Error message
-//! 
-//! 2023-01-02 18:00:02 | WARN   | Warning message
-//! 
-//! 2023-01-02 18:00:02 | INFO   | Info message
-//! 
-//! 2023-01-02 18:00:02 | DEBUG  | Debug message
-//! 
-//! 2023-01-02 18:00:02 | TRACE  | Trace message
-//! 
-//! 
 //! In file dlog-custom.log are added same log lines as in console.
 //! 
 //! ### Macros usage:
@@ -156,15 +78,6 @@
 //!     debug!("Debug message");
 //!     trace!("Trace message");
 //! }
-//! 
-//! This will outputs:
-//! 
-//! 2023/01/02 18.01.27 : ERROR  : Error message
-//! 2023/01/02 18.01.27 : WARN   : Warning message
-//! 2023/01/02 18.01.27 : INFO   : Info message
-//! 2023/01/02 18.01.27 : DEBUG  : Debug message
-//! 2023/01/02 18.01.27 : TRACE  : Trace message
-//! 
 //! 
 //! Custom settings version:
 //! ```
@@ -185,15 +98,6 @@
 //!     trace!("Trace message");
 //! }
 //! ```
-//! 
-//! This will outputs:
-//! 
-//! 2023-01-02 18:02:02 | ERROR  | Error message
-//! 2023-01-02 18:02:02 | WARN   | Warning message
-//! 2023-01-02 18:02:02 | INFO   | Info message
-//! 2023-01-02 18:02:02 | DEBUG  | Debug message
-//! 2023-01-02 18:02:02 | TRACE  | Trace message
-//! 
 //! In file log-custom.log are added same log lines as in console.
 //! 
 
@@ -206,4 +110,6 @@ mod tests {
     }
 }
 
+/// Modulo dlog
+#[doc(inline)]
 pub mod dlog;
