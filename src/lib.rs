@@ -111,5 +111,4 @@ mod tests {
 }
 
 /// Modulo dlog
-#[doc(inline)]
 pub mod dlog;

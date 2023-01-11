@@ -1,3 +1,4 @@
+//#![allow(missing_docs)]
 #[doc(inline)]
 
 use chrono::Utc;
@@ -5,7 +6,7 @@ pub use log::{debug, error, info, trace, warn, LevelFilter};
 use log::{Level, Log, Metadata, ParseLevelError, Record, SetLoggerError};
 use std::{
     env::{self, VarError},
-    str::FromStr, fs::{OpenOptions, File, self}, io::{self, Write, stdout}, path::{Path, PathBuf},
+    str::FromStr, fs::{OpenOptions, File, self}, io::{self, Write, stdout}, path::PathBuf,
 };
 
 /// Colors
@@ -28,15 +29,18 @@ const STR_TRACE: &str = "TRACE ";
 /// Default settings values
 const DEFAULT_TIMESTAMP_FORMAT: &str="%Y/%m/%d %H.%M.%S";
 const DEFAULT_SEP: &str = " : ";
-//const DEFAULT_EXT: &str = "log";
-
 //const MB: u64 = 1024 * 1024;
 
+/// Enumaration to handle different kinds of errors.
 #[derive(Debug)]
 pub enum DLogError {
+    #[doc(hidden)]
     Level(ParseLevelError),
+    #[doc(hidden)]
     Env(VarError),
+    #[doc(hidden)]
     Err(io::Error),
+    #[doc(hidden)]
     None,
 }
 /*
@@ -45,6 +49,8 @@ enum DStorageMode {
     ByTime,
 }
 */
+
+/// struct to hold all settings to handle logging.
 #[derive(Debug)]
 pub struct DLog {
     level: LevelFilter,
@@ -74,7 +80,11 @@ impl Default for DLog {
 }
 
 impl DLog {
-    
+    /// Create an instant of ['DLog'] with default settings:
+    /// - Log only on stdout (file disabled).
+    /// - Color disabled.
+    /// - Show Timestamp.
+    /// - Show Level.
     pub fn new() -> Self {
         Self {
             level: LevelFilter::Trace,
@@ -115,8 +125,6 @@ impl DLog {
             }
         }
     }
-
-    // TODO: with_file(mut self)
 
     /// Convenient function to enable color in construction.
     pub fn with_color(mut self) -> Self {
