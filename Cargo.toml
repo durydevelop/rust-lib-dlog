@@ -17,3 +17,15 @@ categories = ["command-line-utilities"]
 log = { version = "0.4.17", features = ["std"] }
 time = { version = "0.3.17", features = ["formatting", "macros"] }
 chrono = "0.4"
+
+[[example]]
+name = "log-custom"
+
+[[example]]
+name = "log-default"
+
+[[example]]
+name = "dlog-custom"
+
+[[example]]
+name = "dlog-default"

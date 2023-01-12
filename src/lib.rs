@@ -2,28 +2,35 @@
 #![warn(clippy::missing_docs_in_private_items)]
 //! # DLog
 //! 
-//! After try to use a lot of crates to make logging, my conclusion is that there 2 types of logger:
-//! 1. Rich of futures but too much complcate to use.
-//! 2. Easy to use but single use (e.g. log only on file or only on console).
-//! So, I decided to write my own lib that aims to be easy to use but with with some usefull futures:
-//! * Log on stdout.
-//! * Log on file.
-//! * Very easy to start (default standard settings in new() method).
-//! * Easy to call.
-//! * Implements [log](https://crates.io/crates/log) crate to use Rust library logging macros.
+//! This crate adds logging to your projects or library.
 //! 
+//! After trying a lot of crates to make logging, I only found crates rich of futures but very complicate to use,
+//! or crates that are easy to use but log only on file or only on console.
+//! 
+//! I decided to write my own lib that aims to be **easy to use with some usefull futures**:
+//! * Can log only on stdout, only on file or both.
+//! * Very easy to start: install and use immediately.
+//! * Short API names.
+//! * It implements [log](https://crates.io/crates/log) crate so you can use Rust library logging macros.
+//! 
+//! ## Add to project:
+//! In file cargo.toml add:
 //! ```toml
 //! [dependencies]
-//! tui = "0.19"
-//! crossterm = "0.25"
+//! dlog = "0.1.0"
 //! ```
+//! ## Getting Start
+//! There are 2 way for use this crate:
+//! * Directly create object: ```let dlog=DLog::new();``` and use like ```dlog.d("Log message");```
+//! * Initialize logger: ```DLog::new().init_logger().ok();``` and use with [log](https://crates.io/crates/log) macro like ```debug!("Log message");```
 //! 
+//! Output (on console and/or file) for default settings is like:
+//! ```toml
+//! 2023/01/02 18.01.27 : DEBUG  : Debug message
+//! ```
+//! First tag is datetime stamp, second tag is level name followed by log message tag
 //! ## Examples:
-//! 
-//! ### Direct usage:
-//! 
-//! Default settings usage:
-//! 
+//! ### Directly usage with default settings:
 //! ```rust
 //! use dlog::dlog::DLog;
 //! 
@@ -39,8 +46,9 @@
 //!     dlog.t("Trace message");
 //! }
 //! ```
-//! Custom settimgs usage:
+//! This will log on stdout without colors.
 //! 
+//! ### Directly usage with custom settings:
 //! ```rust
 //! use dlog::dlog::DLog;
 //! 
@@ -60,13 +68,10 @@
 //!     dlog.t("Trace message");
 //! }
 //! ```
-//! In file dlog-custom.log are added same log lines as in console.
+//! This will log on stdout with colors, different formatting for timestamp and different tags separator and in file dlog-custom.log are added same log lines as in console.
 //! 
-//! ### Macros usage:
-//! 
-//! Default settings version:
-//! 
-//! ```
+//! ### Macros usage with default settings:
+//! ```rust
 //! use dlog::dlog::{error,warn,info,debug,trace,DLog};
 //! 
 //! fn main() {
@@ -78,9 +83,11 @@
 //!     debug!("Debug message");
 //!     trace!("Trace message");
 //! }
-//! 
-//! Custom settings version:
 //! ```
+//! This will log on stdout without colors.
+//! 
+//! ### Macros usage with custom settings:
+//! ```rust
 //! use dlog::dlog::{error,warn,info,debug,trace,DLog};
 //! 
 //! fn main() {
@@ -98,7 +105,7 @@
 //!     trace!("Trace message");
 //! }
 //! ```
-//! In file log-custom.log are added same log lines as in console.
+//! This will log on stdout with colors, different formatting for timestamp and different tags separator and in file log-custom.log are added same log lines as in console.
 //! 
 
 #[cfg(test)]
@@ -110,5 +117,5 @@ mod tests {
     }
 }
 
-/// Modulo dlog
+/// the only module in this crate.
 pub mod dlog;
