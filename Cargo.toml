@@ -9,7 +9,7 @@ license = "MIT"
 #documentation = ""
 #repository = ""
 keywords = ["log", "logging"]
-categories = ["command-line-utilities"]
+categories = ["development-tools::debugging"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
