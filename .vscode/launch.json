@@ -7,16 +7,16 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug unit tests in library 'dlog'",
+            "name": "Debug unit tests in library 'durylog'",
             "cargo": {
                 "args": [
                     "test",
                     "--no-run",
                     "--lib",
-                    "--package=dlog"
+                    "--package=durylog"
                 ],
                 "filter": {
-                    "name": "dlog",
+                    "name": "durylog",
                     "kind": "lib"
                 }
             },
@@ -31,7 +31,7 @@
                 "args": [
                     "build",
                     "--example=log-macro",
-                    "--package=dlog"
+                    "--package=durylog"
                 ],
                 "filter": {
                     "name": "log-macro",
@@ -50,7 +50,7 @@
                     "test",
                     "--no-run",
                     "--example=log-macro",
-                    "--package=dlog"
+                    "--package=durylog"
                 ],
                 "filter": {
                     "name": "log-macro",

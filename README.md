@@ -15,64 +15,64 @@
  In file cargo.toml add:
  ```toml
  [dependencies]
- dlog = "0.1.0"
+ durylog = "0.1.0"
  ```
  ## Getting Start
  There are 2 way for use this crate:
- * Directly create object: ```let dlog=DLog::new();``` and use like ```dlog.d("Log message");```
+ * Directly create object: ```let durylog=DLog::new();``` and use like ```durylog.d("Log message");```
  * Initialize logger: ```DLog::new().init_logger().ok();``` and use with [log](https://crates.io/crates/log) macro like ```debug!("Log message");```
  
  Output (on console and/or file) for default settings is like:
- ```toml
+ ```
  2023/01/02 18.01.27 : DEBUG  : Debug message
  ```
  First tag is datetime stamp, second tag is level name followed by log message tag
  ## Documentation:
- https://docs.rs/dlog
+ https://docs.rs/durylog
  ## Examples:
  ### Directly usage with default settings:
  ```rust
- use dlog::dlog::DLog;
+ use durylog::DLog;
  
  fn main() {
-     let dlog=DLog::new();
+     let durylog=DLog::new();
  
-     println!("{}", dlog.get_status()); // This prints all current crate settings (in this case are defaults)
+     println!("{}", durylog.get_status()); // This prints all current crate settings (in this case are defaults)
  
-     dlog.e("Error message");
-     dlog.w("Warning message");
-     dlog.i("Info message");
-     dlog.d("Debug message");
-     dlog.t("Trace message");
+     durylog.e("Error message");
+     durylog.w("Warning message");
+     durylog.i("Info message");
+     durylog.d("Debug message");
+     durylog.t("Trace message");
  }
  ```
  This will log on stdout without colors.
  
  ### Directly usage with custom settings:
  ```rust
- use dlog::dlog::DLog;
+ use durylog::DLog;
  
  fn main() {
-     let dlog=DLog::new()
+     let durylog=DLog::new()
      .with_color() // Enable colors in console output (default disabled)
      .widh_timestamp_format("%Y-%m-%d %H:%M:%S") // Change default timestamp
      .widh_custom_separator(" | ") // Change default separator pattern for items
-     .with_file("dlog-custom.log").unwrap(); // Enable logging on file (default disable)
+     .with_file("durylog-custom.log").unwrap(); // Enable logging on file (default disable)
  
- println!("{}", dlog.get_status()); // This prints all current crate settings (in this case there are custom)
+ println!("{}", durylog.get_status()); // This prints all current crate settings (in this case there are custom)
  
-     dlog.e("Error message");
-     dlog.w("Warning message");
-     dlog.i("Info message");
-     dlog.d("Debug message");
-     dlog.t("Trace message");
+     durylog.e("Error message");
+     durylog.w("Warning message");
+     durlog.i("Info message");
+     durylog.d("Debug message");
+     durylog.t("Trace message");
  }
  ```
- This will log on stdout with colors, different formatting for timestamp and different tags separator and in file dlog-custom.log are added same log lines as in console.
+ This will log on stdout with colors, different formatting for timestamp and different tags separator and in file durylog-custom.log are added same log lines as in console.
  
  ### Macros usage with default settings:
  ```rust
- use dlog::dlog::{error,warn,info,debug,trace,DLog};
+ use durylog::{error,warn,info,debug,trace,DLog};
  
  fn main() {
      DLog::new().init_logger().ok();
@@ -88,7 +88,7 @@
  
  ### Macros usage with custom settings:
  ```rust
- use dlog::dlog::{error,warn,info,debug,trace,DLog};
+ use durylog::{error,warn,info,debug,trace,DLog};
  
  fn main() {
      DLog::new()

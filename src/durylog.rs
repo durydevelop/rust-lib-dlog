@@ -1,6 +1,5 @@
 //#![allow(missing_docs)]
 #[doc(inline)]
-
 use chrono::Utc;
 pub use log::{debug, error, info, trace, warn, LevelFilter};
 use log::{Level, Log, Metadata, ParseLevelError, Record, SetLoggerError};
@@ -305,14 +304,15 @@ impl DLog {
         }
     }
 
-    /// ['return'] info on dlog crate setting.
+    /// ['return'] info about durylog crate setting.
     /// ### Example
-    /// ```
-    /// let dlog=DLog::new();
-    /// println!("{}", dlog.get_status());
+    /// ```rust
+    /// let durylog=DLog::new();
+    /// println!("{}", durylog.get_status());
     /// ```
     /// Will output:
-    /// ---- dlog create current settings ----
+    /// ```
+    /// ---- durylog create current settings ----
     /// Show Colors       =  false
     /// Show Level        =  true
     /// Show Timestamp    =  true
@@ -324,6 +324,7 @@ impl DLog {
     /// Max file size     =  no limit
     /// Max files count   =  no limit
     /// --------------------------------------
+    /// ```
     pub fn get_status(&self) -> String {
         let max_file_size=self.max_file_size.to_string();
         let max_files_count=self.max_files_count.to_string();
@@ -337,7 +338,7 @@ impl DLog {
         } 
 
         let status_info=String::new() +
-            "----------- dlog current settings -----------" + "\n" +
+            "----------- durylog current settings -----------" + "\n" +
             "Show Colors       =  " + &self.show_color_enabled.to_string() + "\n" +
             "Show Level        =  " + &self.show_level_enabled.to_string() + "\n" +
             "Show Timestamp    =  " + &self.show_timestamp_enabled.to_string() + "\n" +

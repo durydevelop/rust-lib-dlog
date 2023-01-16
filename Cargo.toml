@@ -1,5 +1,5 @@
 [package]
-name = "dlog"
+name = "durylog"
 version = "0.1.0"
 edition = "2021"
 authors = ["Fabio Durigon <develop@dury.it>"]
@@ -25,7 +25,7 @@ name = "log-custom"
 name = "log-default"
 
 [[example]]
-name = "dlog-custom"
+name = "durylog-custom"
 
 [[example]]
-name = "dlog-default"
+name = "durylog-default"

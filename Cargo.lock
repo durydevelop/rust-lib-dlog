@@ -111,7 +111,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "dlog"
+name = "durylog"
 version = "0.1.0"
 dependencies = [
  "chrono",

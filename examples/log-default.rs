@@ -1,4 +1,4 @@
-use dlog::dlog::{error,warn,info,debug,trace,DLog};
+use durylog::{error,warn,info,debug,trace,DLog};
 
 fn main() {
     DLog::new().init_logger().ok();
