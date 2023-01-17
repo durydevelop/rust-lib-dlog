@@ -1,4 +1,4 @@
- # DLog
+ # durylog
  
  This crate adds logging to your projects or library.
  
