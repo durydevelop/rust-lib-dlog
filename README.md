@@ -21,15 +21,15 @@
  There are 2 way for use this crate:
  * Directly create object: ```let durylog=DLog::new();``` and use like ```durylog.d("Log message");```
  * Initialize logger: ```DLog::new().init_logger().ok();``` and use with [log](https://crates.io/crates/log) macro like ```debug!("Log message");```
+
+ Read [documentation](https://docs.rs/durylog/) and [examples](examples/).
  
  Output (on console and/or file) for default settings is like:
  ```
  2023/01/02 18.01.27 : DEBUG  : Debug message
  ```
  First tag is datetime stamp, second tag is level name followed by log message tag
- ## Documentation:
- https://docs.rs/durylog
- ## Examples:
+  ## Examples:
  ### Directly usage with default settings:
  ```rust
  use durylog::DLog;

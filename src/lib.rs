@@ -24,6 +24,8 @@
 //! * Directly create object: ```let durylog=DLog::new();``` and use like ```durylog.d("Log message");```
 //! * Initialize logger: ```DLog::new().init_logger().ok();``` and use with [log](https://crates.io/crates/log) macro like ```debug!("Log message");```
 //! 
+//! Read [documentation](https://docs.rs/durylog/) and [examples](examples/).
+//! 
 //! Output (on console and/or file) for default settings is like:
 //! ```toml
 //! 2023/01/02 18.01.27 : DEBUG  : Debug message

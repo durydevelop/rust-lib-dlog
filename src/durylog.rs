@@ -311,7 +311,7 @@ impl DLog {
     /// println!("{}", durylog.get_status());
     /// ```
     /// Will output:
-    /// ```
+    /// ```toml
     /// ---- durylog create current settings ----
     /// Show Colors       =  false
     /// Show Level        =  true
