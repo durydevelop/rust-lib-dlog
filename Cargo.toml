@@ -1,6 +1,6 @@
 [package]
 name = "durylog"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Fabio Durigon <develop@dury.it>"]
 description = "An easy to use library to implements logging on stdout, file or both."

@@ -105,7 +105,7 @@ impl DLog {
         }
     }
     
-// ********** new() default modification functions **********
+// ************** Api for new() initialization **************
     /// Enable logging on file and open it.
     pub fn with_file(mut self, filename: &str) -> Result<Self, DLogError> {
         match self.open_file(filename) {
@@ -170,16 +170,27 @@ impl DLog {
         self
     }
 
-    /// Use custom separator for tags. Default is ':'
+    /// Use custom separator for tags. Default separator is ':'.
+    /// 
     /// E.g.:
+    /// 
     /// 2022/12/28 17.38.42 : ERROR  : Error message 
     pub fn widh_custom_separator(mut self, new_sep: &str) -> Self{
         self.separator=new_sep.to_string();
         self
     }
 
+    /// Disable logging on stdout.
+    pub fn without_console(mut self) -> Self {
+        self.log_on_stdout=false;
+        self
+    }
+
     /// Initialize for use with std::log crate.
+    /// 
     /// Must call before using std::log macro: error!() warn!() debug!() trace!()
+    /// 
+    /// Any use of ['debug!()'] will do nothing without  calling this function.
     pub fn init_logger(self) -> Result<(),SetLoggerError> {
         log::set_boxed_logger(Box::new(self)).map(|()| log::set_max_level(LevelFilter::Trace))
     }
